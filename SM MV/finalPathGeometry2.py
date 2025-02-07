@@ -79,8 +79,8 @@ log_results = client.execute_motion_program(mp) # run on the robot/robotstudio a
 exit()
 '''
 filename = "PathpointsforSheetMetal.xlsx"# replace with file path, keep the r"" though or else funky errors
-#sheet_name = "ForPython"  # Replace with your sheet name
-sheet_name = "HorizontalLineTest"
+sheet_name = "ForPython"  # Replace with your sheet name
+#sheet_name = "HorizontalLineTest"
 data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 
 # Convert to NumPy array
@@ -112,10 +112,12 @@ for i in range(len(tempPoints)):
     else:
         lineList[line].append([tempPoints[i][0], tempPoints[i][1], tempPoints[i][2], line])
 
+#reverses every other line
 for i in range(len(lineList)):
     if i % 2 == 1:
         lineList[i].reverse()
 
+#converts the list of lines to a list of points
 for i in range(len(lineList)):
     for j in range(len(lineList[i])):
         tempPos.append(lineList[i][j])
@@ -137,11 +139,11 @@ for i in range(len(positions)):
     robt = abb.robtarget(positions[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
     mp.MoveL(robt, abb.v5, abb.fine)
 
-#print(positions)
+print(positions)
 print("Robot start moving")
     
-client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
-#client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
+#client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
+client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
 
 exit()
