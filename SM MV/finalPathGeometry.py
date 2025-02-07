@@ -79,7 +79,8 @@ log_results = client.execute_motion_program(mp) # run on the robot/robotstudio a
 exit()
 '''
 filename = "PathpointsforSheetMetal.xlsx"# replace with file path, keep the r"" though or else funky errors
-sheet_name = "ForPython"  # Replace with your sheet name
+#sheet_name = "ForPython"  # Replace with your sheet name
+sheet_name = "RightAngleTest"
 data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 
 # Convert to NumPy array
@@ -90,7 +91,7 @@ print(tempPos[0])
 
 #lowest
 minimum = -0.4
-increm = 0.01
+increm = 0.05
 
 minval = 0
 height = 0
@@ -106,9 +107,9 @@ while height >= minimum:
         else:
             positions.append([tempPos[i][0], tempPos[i][1], tempPos[i][2]])
     height += -increm
-if height + increm > minimum:
+if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
-        positions.append([tempPos[i][0], tempPos[i][1], tempPos[i][2]])
+        positions.append([tempPos[i][0], tempPos[i][1], minimum])
 
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(positions)):
