@@ -11,7 +11,15 @@ final_rig_pose=np.loadtxt("rig_pose.csv",delimiter=',')
 
 Pbr = final_rig_pose[0:3,-1]
 
-Rbr = final_rig_pose[0:3, 0:3]
+#Angle adjustment about z axis, makes parallel with rig axis
+z_theta = 3.4279*np.pi/180     #Radians
+#current z axis
+vz = final_rig_pose[0:3, 2]
+Rz = rot(vz, z_theta)
+
+Rbr = final_rig_pose[0:3, 0:3]*Rz
+
+Tcb = homohogenous
 
 qbr = R2q(Rbr)
 
@@ -26,7 +34,7 @@ tool_T = Transform(np.eye(3), Pft)
 
 # Run it on the robot
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
-my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr+ [7,-5,0],qbr),abb.pose([0,0,0],[1,0,0,0]))
+my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,-5,0], qbr),abb.pose([0,0,0],[1,0,0,0]))
 
 def quadrant(q,robot):
 	cf146=np.floor(np.array([q[0],q[3],q[5]])/(np.pi/2))
