@@ -19,8 +19,6 @@ Rz = rot(vz, z_theta)
 
 Rbr = final_rig_pose[0:3, 0:3]*Rz
 
-Tcb = homohogenous
-
 qbr = R2q(Rbr)
 
 # Define the robot
