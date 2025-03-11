@@ -17,8 +17,8 @@ distance = z_depth - lin_fit;
 filtered_z_depth = smoothdata(distance, "movmean", 35);
 
 %Original Data Plot
-%plot(x_length, z_depth)
-%figure;
+plot(x_length, z_depth)
+figure;
 
 %Local Maxima
 max = islocalmax(filtered_z_depth);

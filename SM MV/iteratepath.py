@@ -17,9 +17,7 @@ z_theta = 3.4279*np.pi/180     #Radians
 vz = final_rig_pose[0:3, 2]
 Rz = rot(vz, z_theta)
 
-Rbr = final_rig_pose[0:3, 0:3]*Rz
-
-Tcb = homohogenous
+Rbr = final_rig_pose[0:3, 0:3]@Rz
 
 qbr = R2q(Rbr)
 

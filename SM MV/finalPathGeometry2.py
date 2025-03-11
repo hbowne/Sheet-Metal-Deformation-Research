@@ -15,11 +15,30 @@ final_rig_pose=np.loadtxt("rig_pose.csv",delimiter=',')
 
 Pbr = final_rig_pose[0:3,-1]
 
-Rbr = final_rig_pose[0:3, 0:3]
+#Angle adjustment about z axis, makes parallel with rig axis
+z_theta = 3.4279*np.pi/180     #Radians
+#current z axis
+vz = final_rig_pose[0:3, 2]
+Rz = rot(vz, z_theta)
+
+Rbr = final_rig_pose[0:3, 0:3]@Rz
 
 Pft = np.array([-55.755, 0, 130.05])
 
 tool_T = Transform(np.eye(3), Pft)
+
+#FLIP
+vy = final_rig_pose[0:3, 1]     #Flipping 180 over the y axis
+Ry = rot(vy, 180)
+
+Pshift = np.array([90.5288, 0, 0])      #From Excel Sheet
+Tcb = np.columnstacks((Ry, Pshift))
+Tcb = np.vstack((Tcb, np.array([0,0,1])))
+
+Tab = final_rig_pose @ Tcb
+
+Pbr = Tab[0:3,-1]
+Rbr = Tab[0:3, 0:3]
 
 # Run it on the robot
 qbr = R2q(Rbr)
@@ -79,7 +98,7 @@ log_results = client.execute_motion_program(mp) # run on the robot/robotstudio a
 exit()
 '''
 filename = "PathpointsforSheetMetal.xlsx"# replace with file path, keep the r"" though or else funky errors
-sheet_name = "ForPython"  # Replace with your sheet name
+sheet_name = "Reversed"  # Replace with your sheet name
 #sheet_name = "HorizontalLineTest"
 data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 
