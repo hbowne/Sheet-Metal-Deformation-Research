@@ -1,8 +1,8 @@
-data = load("2_9_A2");
+data = load("2_9_A3");
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,119:658);
-z_depth = data(2,119:658);
+x_length = data(1,1:1200);
+z_depth = data(2,1:1);
 
 %Original Data Plot
 plot(x_length, z_depth)

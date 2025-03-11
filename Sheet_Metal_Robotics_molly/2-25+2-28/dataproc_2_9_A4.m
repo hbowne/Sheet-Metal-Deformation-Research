@@ -1,16 +1,17 @@
-data = load("2_9_A2");
+figure;
+data = load("2_9_A4");
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,119:658);
-z_depth = data(2,119:658);
+x_length = data(1,75:670);
+z_depth = data(2,75:670);
 
 %Original Data Plot
 plot(x_length, z_depth)
 figure;
 
 %Trendline
-z_linear = z_depth(119:540);
-x_linear = x_length(119:540);
+z_linear = z_depth;
+x_linear = x_length;
 coeff = polyfit(x_linear, z_linear, 1);
 lin_fit = coeff(1)*x_length + coeff(2);
 
