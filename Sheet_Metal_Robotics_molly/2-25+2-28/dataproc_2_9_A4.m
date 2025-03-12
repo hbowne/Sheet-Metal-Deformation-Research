@@ -2,12 +2,12 @@ figure;
 data = load("2_9_A4");
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,75:670);
-z_depth = data(2,75:670);
+x_length = data(1,72:698);
+z_depth = data(2,72:698);
 
 %Original Data Plot
-plot(x_length, z_depth)
-figure;
+%plot(x_length, z_depth)
+%figure;
 
 %Trendline
 z_linear = z_depth;
