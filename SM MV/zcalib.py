@@ -28,6 +28,8 @@ RR_ati_cli=RRN.ConnectService('rr+tcp://localhost:59823?service=ati_sensor')
 #MAKE SURE THIS IS RIGHT
 #Measure the z and y displacement from the flange to the tool tip
 Pft = np.array([-55.755, 0, 130.05])
+#x to inside of pen holder: -49.55
+#z to end of pen holder 92.4
 
 tool_T = Htransform(np.eye(3), Pft)
 np.savetxt("rig_pen.csv", tool_T, delimiter = ',')
@@ -60,19 +62,19 @@ controller_params = {
 #If values aren't near these SOMETHING IS WRONG: x~560,650 y~135,60 z~330
 
 #bottom left
-c1 = np.array([557.84, 135.43, 329.52]) 
+c1 = np.array([549.86, 140.3, 333.93]) 
 #bottom right --> Po, rig origin point
-c2 = np.array([557.98, 58.39, 329.11]) 
+c2 = np.array([553.44, 54.96, 334.39]) 
 #top left
-c3 = np.array([648.19, 140.70, 326.00])
+c3 = np.array([649.69, 143.56, 330.73])
 #top right
-c4 = np.array([651.69, 51.36, 325.58]) 
+c4 = np.array([653.49, 59.5, 330.56]) 
 
 #Quaternion from teachpendant, base to flange
 RoF = q2R(np.array([.01916, .00040, -.99982, -.00112]))
 
 #Measure the z and x displacement from the flange to the tool tip
-Pft = np.array([-55.755, 0, 130.05])
+#Pft = np.array([-55.755, 0, 130.05])
 
 c1 = c1 + RoF@Pft
 c2 = c2 + RoF@Pft

@@ -12,7 +12,7 @@ final_rig_pose=np.loadtxt("rig_pose.csv",delimiter=',')
 Pbr = final_rig_pose[0:3,-1]
 
 #Angle adjustment about z axis, makes parallel with rig axis
-z_theta = 3.4279*np.pi/180     #Radians
+z_theta = 2.0549*np.pi/180     #Radians
 #current z axis
 vz = final_rig_pose[0:3, 2]
 Rz = rot(vz, z_theta)
@@ -57,9 +57,12 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 #Points 0 is -1
 
 #Check origin
-p1 = [75,75,20] 
+p1 = [10, 20, 10] 
+p2 = [10, 20, -.1]
+p3 = [70, 20, -.1]
+p4 = [70, 20, 10]
 
-corner_p = np.array([p1])
+corner_p = np.array([p1, p2, p3, p4])
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(corner_p)):
     robt = abb.robtarget(corner_p[i],R2q(corner_R),abb.confdata(0,-1,-1,0),[0]*6) # create the robtarget, position (mm), orientation (quaternion)

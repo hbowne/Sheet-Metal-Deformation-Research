@@ -51,9 +51,9 @@ with open('ABB_1200_5_90_robot_default_config.yml', 'r') as file:
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
 
 #for run on sheet metal
-my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
+#my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
 #for run in space
-#my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
+my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
 
 def quadrant(q,robot):
 	cf146=np.floor(np.array([q[0],q[3],q[5]])/(np.pi/2))

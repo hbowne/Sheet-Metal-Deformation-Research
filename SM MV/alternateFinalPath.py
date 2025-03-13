@@ -90,7 +90,7 @@ tempPoints = points[:, :3]
 #print(tempPos)
 
 #lowest
-minimum = -0.5
+minimum = -0.2
 increm = 0.05
 
 minval = 0
@@ -152,7 +152,7 @@ print(positions)
 print("Robot start moving")
     
 #client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
-#client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
+client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
 
 exit()
