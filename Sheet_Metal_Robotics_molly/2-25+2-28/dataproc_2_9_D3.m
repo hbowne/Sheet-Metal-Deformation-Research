@@ -1,13 +1,13 @@
 figure;
-data = load("2_9_D1.txt");
+data = load("2_9_D3.txt");
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,6:1210);
-z_depth = data(2,6:1210);
+x_length = data(1,1:1243);
+z_depth = data(2,1:1243);
 
 %Original Data Plot
-%plot(x_length, z_depth)
-%figure;
+plot(x_length, z_depth)
+figure;
 
 %Trendline
 z_linear = z_depth;
