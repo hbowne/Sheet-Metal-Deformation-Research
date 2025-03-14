@@ -6,8 +6,8 @@ coeff = polyfit(dataAve(1, 1:1200), dataAve(2, 1:1200), 1);
 %plot(dataAve(1, 1:1200), dataAve(2, 1:1200))
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,1:1200);
-z_depth = data(2,1:1200);
+x_length = data(1,27:1090);
+z_depth = data(2,27:1090);
 
 %Original Data Plot
 %plot(x_length, z_depth)
