@@ -52,14 +52,13 @@ def calibrate(c1,c2,c3,c4):
     H = Htransform(Rbr, Pbr)
     np.savetxt("rig_pose_raw.csv", H, delimiter = ',')
     
-    print("New ra rig pose is")
+    print("New raw rig pose is")
     print(H)
     
     return H
 
 def Htransform(R,P):
     """
-    
 
     Parameters
     ----------

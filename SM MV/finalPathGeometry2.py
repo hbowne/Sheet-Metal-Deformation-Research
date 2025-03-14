@@ -16,13 +16,14 @@ final_rig_pose=np.loadtxt("rig_pose.csv",delimiter=',')
 Pbr = final_rig_pose[0:3,-1]
 
 #Angle adjustment about z axis, makes parallel with rig axis
-z_theta = 3.4279*np.pi/180     #Radians
+z_theta = 2.0549*np.pi/180 
 #current z axis
 vz = final_rig_pose[0:3, 2]
 Rz = rot(vz, z_theta)
 
 Rbr = final_rig_pose[0:3, 0:3]@Rz
 
+#Tool transformation
 Pft = np.array([-55.755, 0, 130.05])
 
 tool_T = Transform(np.eye(3), Pft)
@@ -31,15 +32,14 @@ tool_T = Transform(np.eye(3), Pft)
 vy = final_rig_pose[0:3, 1]     #Flipping 180 over the y axis
 Ry = rot(vy, 180)
 
-Pshift = np.array([90.5288, 0, 0])      #From Excel Sheet
-Tcb = np.columnstacks((Ry, Pshift))
-Tcb = np.vstack((Tcb, np.array([0,0,1])))
+Pshift = np.array([90.5288-19.7, 0, 0])      #From Excel Sheet
+Tcb = np.column_stack((Ry, np.transpose(Pshift)))
+Tcb = np.vstack((Tcb, np.array([0,0,0,1])))
 
-Tab = final_rig_pose @ Tcb
+Tab = final_rig_pose@Tcb
 
 Pbr = Tab[0:3,-1]
 Rbr = Tab[0:3, 0:3]
-
 # Run it on the robot
 qbr = R2q(Rbr)
 
@@ -51,9 +51,9 @@ with open('ABB_1200_5_90_robot_default_config.yml', 'r') as file:
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
 
 #for run on sheet metal
-#my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
+my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
 #for run in space
-my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
+#my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
 
 def quadrant(q,robot):
 	cf146=np.floor(np.array([q[0],q[3],q[5]])/(np.pi/2))
@@ -109,7 +109,7 @@ tempPoints = points[:, :3]
 #print(tempPos)
 
 #lowest
-minimum = -0.4
+minimum = -0.2
 increm = 0.05
 
 minval = 0
@@ -133,22 +133,30 @@ for i in range(len(tempPoints)):
 
 #reverses every other line
 for i in range(len(lineList)):
-    if i % 2 == 1:
+    if i % 2 == 0:
         lineList[i].reverse()
 
 #converts the list of lines to a list of points
 for i in range(len(lineList)):
     for j in range(len(lineList[i])):
         tempPos.append(lineList[i][j])
+for i in range(len(lineList)):
+    lineList[i].reverse()
+    for j in range(len(lineList[i])):
+        tempPos.append(lineList[i][j])
 
-#converts the final points to multiple passes
+#converts the final points to multiple passes switching which set of points each time
+j=0
 while height >= minimum:
-    for i in range(len(tempPos)):
-        if tempPos[i][2] < 0 and height > tempPos[i][2]:
-            positions.append([tempPos[i][0], tempPos[i][1], height])
+    for i in range(len(tempPos)//2):
+        if tempPos[i + j][2] < 0 and height > tempPos[i + j][2]:
+            positions.append([tempPos[i + j][0], tempPos[i + j][1], height])
         else:
-            positions.append([tempPos[i][0], tempPos[i][1], tempPos[i][2]])
+            positions.append([tempPos[i + j][0], tempPos[i + j][1], tempPos[i + j][2]])
+    j += len(tempPos)//2
     height += -increm
+    if j > len(tempPos)//2:
+        j = 0
 if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
         positions.append([tempPos[i][0], tempPos[i][1], minimum])
@@ -159,8 +167,10 @@ for i in range(len(positions)):
     mp.MoveL(robt, abb.v5, abb.fine)
 
 print(positions)
+#print(len(tempPos))
 print("Robot start moving")
-    
+print()
+
 #client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
 client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results

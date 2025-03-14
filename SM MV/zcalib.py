@@ -73,19 +73,15 @@ c4 = np.array([653.49, 59.5, 330.56])
 #Quaternion from teachpendant, base to flange
 RoF = q2R(np.array([.01916, .00040, -.99982, -.00112]))
 
-#Measure the z and x displacement from the flange to the tool tip
-#Pft = np.array([-55.755, 0, 130.05])
-
 c1 = c1 + RoF@Pft
 c2 = c2 + RoF@Pft
 c3 = c3 + RoF@Pft
 c4 = c4 + RoF@Pft
 
 #saves raw Pbr, Rbr to .csv file, ready for second calibration for z axis
-#calibrate(c1,c2,c3,c4)
+calibrate(c1,c2,c3,c4)
 
 rig_pose=np.loadtxt("rig_pose_raw_test.csv",delimiter=',')
-#rig_pose = calibrate(c1,c2,c3,c4)
 
 print(rig_pose)
 
@@ -95,7 +91,6 @@ l = 19.7
 thickness = 2.84
 
 rig_pose[:3,-1]=rig_pose[:3,-1]+rig_pose[:3,:3]@np.array([h/2,w/2,0])
-
 
 R_pencil=rig_pose[:3,:3]@Ry(np.pi)
 
@@ -180,4 +175,6 @@ print("New rig R:", R_temp)
 print("New rig center:", center)
 # np.savetxt()
 np.savetxt("rig_pose.csv", H_from_RT(R_temp,center), delimiter=',')
+np.savetxt("mollytest_center.csv", center)
+np.savetxt("mollytest_adjcorner.csv", corners_adjusted)
 		

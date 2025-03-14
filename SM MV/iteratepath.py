@@ -30,6 +30,19 @@ Pft = np.array([-55.755, 0, 130.05])
 
 tool_T = Transform(np.eye(3), Pft)
 
+#FLIP
+vy = final_rig_pose[0:3, 1]     #Flipping 180 over the y axis
+Ry = rot(vy, 180)
+
+Pshift = np.array([0, 90.5288-19.7, 0])      #From Excel Sheet
+Tcb = np.column_stack((Ry, np.transpose(Pshift)))
+Tcb = np.vstack((Tcb, np.array([0,0,0,1])))
+
+Tab = final_rig_pose@Tcb
+
+Pbr = Tab[0:3,-1]
+Rbr = Tab[0:3, 0:3]
+
 # Run it on the robot
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
 my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,-5,0], qbr),abb.pose([0,0,0],[1,0,0,0]))
@@ -57,12 +70,12 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 #Points 0 is -1
 
 #Check origin
-p1 = [10, 20, 10] 
+p1 = [0, 0, 20] 
 p2 = [10, 20, -.1]
 p3 = [70, 20, -.1]
 p4 = [70, 20, 10]
 
-corner_p = np.array([p1, p2, p3, p4])
+corner_p = np.array([p1])
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(corner_p)):
     robt = abb.robtarget(corner_p[i],R2q(corner_R),abb.confdata(0,-1,-1,0),[0]*6) # create the robtarget, position (mm), orientation (quaternion)

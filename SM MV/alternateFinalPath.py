@@ -13,9 +13,15 @@ import pandas as pd
 
 final_rig_pose=np.loadtxt("rig_pose.csv",delimiter=',')
 
+#Angle adjustment about z axis, makes parallel with rig axis
+z_theta = 2.0549*np.pi/180     #Radians
+#current z axis
+vz = final_rig_pose[0:3, 2]
+Rz = rot(vz, z_theta)
+
 Pbr = final_rig_pose[0:3,-1]
 
-Rbr = final_rig_pose[0:3, 0:3]
+Rbr = final_rig_pose[0:3, 0:3]@Rz
 
 Pft = np.array([-55.755, 0, 130.05])
 
