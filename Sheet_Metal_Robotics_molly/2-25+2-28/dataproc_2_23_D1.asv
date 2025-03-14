@@ -1,9 +1,13 @@
 figure;
-data = load("2_9_D3.txt");
+data = load("2_23_D1");
+dataAve = load("2_28_base");
+
+coeff = polyfit(dataAve(1, 1:1200), dataAve(2, 1:1200), 1);
+%plot(dataAve(1, 1:1200), dataAve(2, 1:1200))
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,1:1243);
-z_depth = data(2,1:1243);
+x_length = data(1,1:1200);
+z_depth = data(2,1:1200);
 
 %Original Data Plot
 %plot(x_length, z_depth)
@@ -12,7 +16,7 @@ z_depth = data(2,1:1243);
 %Trendline
 z_linear = z_depth;
 x_linear = x_length;
-coeff = polyfit(x_linear, z_linear, 1);
+%coeff = polyfit(x_linear, z_linear, 1);
 lin_fit = coeff(1)*x_length + coeff(2);
 
 %Adjust Data for Surface Tilt
