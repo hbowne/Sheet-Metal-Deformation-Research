@@ -71,9 +71,9 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 
 #Check origin
 p1 = [0, 0, 20] 
-p2 = [10, 20, -.1]
-p3 = [70, 20, -.1]
-p4 = [70, 20, 10]
+p2 = [0, 50, 20]
+p3 = [50, 50, 20]
+p4 = [50, 0, 20]
 
 corner_p = np.array([p1])
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
