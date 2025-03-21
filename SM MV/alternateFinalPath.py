@@ -85,7 +85,7 @@ log_results = client.execute_motion_program(mp) # run on the robot/robotstudio a
 exit()
 '''
 filename = "PathpointsforSheetMetal.xlsx"# replace with file path, keep the r"" though or else funky errors
-sheet_name = "FlippedFeatures"  # Replace with your sheet name
+sheet_name = "ForPython"  # Replace with your sheet name
 #sheet_name = "HorizontalLineTest"
 data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 
@@ -93,7 +93,7 @@ data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 points = data.to_numpy()
 #print(points)
 tempPoints = points[:, :3]
-print(tempPoints)
+#print(tempPos)
 
 #lowest
 minimum = -0.2
@@ -105,7 +105,7 @@ positions = []
 for i in range(len(tempPoints)):
     if tempPoints[i][2] < minval:
         minval = tempPoints[i][2]
-"""
+
 #initializes the set of points as a list of lines
 tempPos = []
 startPoint = tempPoints[0]
@@ -147,16 +147,10 @@ while height >= minimum:
 if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
         positions.append([tempPos[i][0], tempPos[i][1], minimum])
-"""
-"""
+
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(positions)):
     robt = abb.robtarget(positions[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
-    mp.MoveL(robt, abb.v5, abb.fine)
-"""
-corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
-for i in range(len(tempPoints)):
-    robt = abb.robtarget(tempPoints[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
     mp.MoveL(robt, abb.v5, abb.fine)
 
 print(positions)
