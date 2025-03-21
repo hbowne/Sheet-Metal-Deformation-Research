@@ -12,36 +12,35 @@ final_rig_pose=np.loadtxt("rig_pose.csv",delimiter=',')
 Pbr = final_rig_pose[0:3,-1]
 
 #Angle adjustment about z axis, makes parallel with rig axis
-z_theta = 2.0549*np.pi/180     #Radians
+z_theta = 2.0549*np.pi/180 
 #current z axis
 vz = final_rig_pose[0:3, 2]
 Rz = rot(vz, z_theta)
 
 Rbr = final_rig_pose[0:3, 0:3]@Rz
 
-qbr = R2q(Rbr)
-
-# Define the robot
-with open('ABB_1200_5_90_robot_default_config.yml', 'r') as file:
-    robot = rr_rox.load_robot_info_yaml_to_robot(file)
-
-#Measure the z and y displacement from the flange to the tool tip
+#Tool transformation
 Pft = np.array([-55.755, 0, 130.05])
 
 tool_T = Transform(np.eye(3), Pft)
 
 #FLIP
-vy = final_rig_pose[0:3, 1]     #Flipping 180 over the y axis
-Ry = rot(vy, 180)
+vx = final_rig_pose[0:3, 0]     #Flipping 180 over the y axis
+Rx = rot(np.array([1,0,0]), np.deg2rad(-180))
 
-Pshift = np.array([0, 90.5288-19.7, 0])      #From Excel Sheet
-Tcb = np.column_stack((Ry, np.transpose(Pshift)))
+Pshift = np.array([0,85.1, 0])      #From Excel Sheet
+
+Tcb = np.column_stack((Rx, np.transpose(Pshift)))
 Tcb = np.vstack((Tcb, np.array([0,0,0,1])))
 
 Tab = final_rig_pose@Tcb
 
 Pbr = Tab[0:3,-1]
 Rbr = Tab[0:3, 0:3]
+# Run it on the robot
+qbr = R2q(Rbr)
+
+print(Rbr)
 
 # Run it on the robot
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
@@ -70,15 +69,15 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 #Points 0 is -1
 
 #Check origin
-p1 = [0, 0, 20] 
+p1 = [0, 0, -30] 
 p2 = [0, 50, 20]
 p3 = [50, 50, 20]
 p4 = [50, 0, 20]
 
 corner_p = np.array([p1])
-corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
+corner_R = np.array([[-1, 0, 0], [0, -1, 0], [0, 0, 1]]).T
 for i in range(len(corner_p)):
-    robt = abb.robtarget(corner_p[i],R2q(corner_R),abb.confdata(0,-1,-1,0),[0]*6) # create the robtarget, position (mm), orientation (quaternion)
+    robt = abb.robtarget(corner_p[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)# create the robtarget, position (mm), orientation (quaternion)
     if i==0 or i==4:
         mp.MoveL(robt,abb.v5,abb.fine) # last zone is fine
     else:

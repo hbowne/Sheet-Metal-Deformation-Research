@@ -92,8 +92,8 @@ data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 # Convert to NumPy array
 points = data.to_numpy()
 #print(points)
-tempPoints = points[:, :3]
-print(tempPoints)
+tempPos = points[:, :3]
+#print(tempPos)
 
 #lowest
 minimum = -0.2
@@ -102,35 +102,10 @@ increm = 0.05
 minval = 0
 height = 0
 positions = []
-for i in range(len(tempPoints)):
-    if tempPoints[i][2] < minval:
-        minval = tempPoints[i][2]
-"""
-#initializes the set of points as a list of lines
-tempPos = []
-startPoint = tempPoints[0]
-line = -1
-lineList = []
-for i in range(len(tempPoints)):
-    if tempPoints[i][1] == startPoint[1] and tempPoints[i][2] == 5:
-        line += 1
-        lineList.append([[tempPoints[i][0], tempPoints[i][1], tempPoints[i][2], line]])
-    else:
-        lineList[line].append([tempPoints[i][0], tempPoints[i][1], tempPoints[i][2], line])
+for i in range(len(tempPos)):
+    if tempPos[i][2] < minval:
+        minval = tempPos[i][2]
 
-#reverses every other line
-for i in range(len(lineList)):
-    if i % 2 == 0:
-        lineList[i].reverse()
-
-#converts the list of lines to a list of points
-for i in range(len(lineList)):
-    for j in range(len(lineList[i])):
-        tempPos.append(lineList[i][j])
-for i in range(len(lineList)):
-    lineList[i].reverse()
-    for j in range(len(lineList[i])):
-        tempPos.append(lineList[i][j])
 
 #converts the final points to multiple passes switching which set of points each time
 j=0
@@ -147,26 +122,18 @@ while height >= minimum:
 if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
         positions.append([tempPos[i][0], tempPos[i][1], minimum])
-"""
-"""
+
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(positions)):
     robt = abb.robtarget(positions[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
     mp.MoveL(robt, abb.v5, abb.fine)
-"""
-corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
-for i in range(len(tempPoints)):
-    robt = abb.robtarget(tempPoints[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
-    mp.MoveL(robt, abb.v5, abb.fine)
 
 print(positions)
-#print(len(tempPos))
 print("Robot start moving")
-    
+
 #client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
 client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
-
 exit()
 
 cmd_num=log_results.data[:,1] # command number

@@ -29,11 +29,12 @@ Pft = np.array([-55.755, 0, 130.05])
 tool_T = Transform(np.eye(3), Pft)
 
 #FLIP
-vy = final_rig_pose[0:3, 1]     #Flipping 180 over the y axis
-Ry = rot(vy, 180)
+vx = final_rig_pose[0:3, 0]     #Flipping 180 over the y axis
+Rx = rot(np.array([1,0,0]), np.deg2rad(-180))
 
-Pshift = np.array([90.5288-19.7, 0, 0])      #From Excel Sheet
-Tcb = np.column_stack((Ry, np.transpose(Pshift)))
+Pshift = np.array([0,85.1, 0])      #From Excel Sheet
+
+Tcb = np.column_stack((Rx, np.transpose(Pshift)))
 Tcb = np.vstack((Tcb, np.array([0,0,0,1])))
 
 Tab = final_rig_pose@Tcb
@@ -43,6 +44,11 @@ Rbr = Tab[0:3, 0:3]
 # Run it on the robot
 qbr = R2q(Rbr)
 
+print(Tab)
+print(Tcb)
+print(final_rig_pose)
+
+
 # Define the robot
 with open('ABB_1200_5_90_robot_default_config.yml', 'r') as file:
     robot = rr_rox.load_robot_info_yaml_to_robot(file)
@@ -51,9 +57,10 @@ with open('ABB_1200_5_90_robot_default_config.yml', 'r') as file:
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
 
 #for run on sheet metal
-my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
+#my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
 #for run in space
-#my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
+#my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],qbr),abb.pose([0,0,0],[1,0,0,0]))
+my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr, qbr),abb.pose([0,0,0],[1,0,0,0]))
 
 def quadrant(q,robot):
 	cf146=np.floor(np.array([q[0],q[3],q[5]])/(np.pi/2))
@@ -78,8 +85,8 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 #Points 0 is -1
 
 #Check origin
-'''
-p1 = [0,0,50] 
+'''''
+p1 = [0,0,20] 
 
 corner_p = np.array([p1])
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
@@ -105,8 +112,8 @@ data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 # Convert to NumPy array
 points = data.to_numpy()
 #print(points)
-tempPoints = points[:, :3]
-#print(tempPos)
+tempPos = points[:, :3]
+print(tempPos)
 
 #lowest
 minimum = -0.2
@@ -115,10 +122,10 @@ increm = 0.05
 minval = 0
 height = 0
 positions = []
-for i in range(len(tempPoints)):
-    if tempPoints[i][2] < minval:
-        minval = tempPoints[i][2]
-
+for i in range(len(tempPos)):
+    if tempPos[i][2] < minval:
+        minval = tempPos[i][2]
+"""
 #initializes the set of points as a list of lines
 tempPos = []
 startPoint = tempPoints[0]
@@ -144,7 +151,7 @@ for i in range(len(lineList)):
     lineList[i].reverse()
     for j in range(len(lineList[i])):
         tempPos.append(lineList[i][j])
-
+"""
 #converts the final points to multiple passes switching which set of points each time
 j=0
 while height >= minimum:
@@ -161,15 +168,18 @@ if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
         positions.append([tempPos[i][0], tempPos[i][1], minimum])
 
-corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
-for i in range(len(positions)):
-    robt = abb.robtarget(positions[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
+corner_R = np.array([[-1, 0, 0], [0, -1, 0], [0, 0, 1]]).T
+for i in range(len(tempPos)):
+    robt = abb.robtarget(tempPos[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
     mp.MoveL(robt, abb.v5, abb.fine)
 
-print(positions)
+#print(positions)
+print(R2q)
 #print(len(tempPos))
 print("Robot start moving")
 print()
+
+#exit()
 
 #client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
 client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
