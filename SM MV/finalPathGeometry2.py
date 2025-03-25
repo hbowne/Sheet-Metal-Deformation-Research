@@ -125,33 +125,8 @@ positions = []
 for i in range(len(tempPos)):
     if tempPos[i][2] < minval:
         minval = tempPos[i][2]
-"""
-#initializes the set of points as a list of lines
-tempPos = []
-startPoint = tempPoints[0]
-line = -1
-lineList = []
-for i in range(len(tempPoints)):
-    if tempPoints[i][1] == startPoint[1] and tempPoints[i][2] == 5:
-        line += 1
-        lineList.append([[tempPoints[i][0], tempPoints[i][1], tempPoints[i][2], line]])
-    else:
-        lineList[line].append([tempPoints[i][0], tempPoints[i][1], tempPoints[i][2], line])
 
-#reverses every other line
-for i in range(len(lineList)):
-    if i % 2 == 0:
-        lineList[i].reverse()
 
-#converts the list of lines to a list of points
-for i in range(len(lineList)):
-    for j in range(len(lineList[i])):
-        tempPos.append(lineList[i][j])
-for i in range(len(lineList)):
-    lineList[i].reverse()
-    for j in range(len(lineList[i])):
-        tempPos.append(lineList[i][j])
-"""
 #converts the final points to multiple passes switching which set of points each time
 j=0
 while height >= minimum:

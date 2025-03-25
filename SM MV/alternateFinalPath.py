@@ -66,7 +66,7 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 
 #Check origin
 '''
-p1 = [0,0,50] 
+p1 = [20,0,20] 
 
 corner_p = np.array([p1])
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
@@ -96,7 +96,7 @@ tempPoints = points[:, :3]
 #print(tempPos)
 
 #lowest
-minimum = -0.2
+minimum = -0.45
 increm = 0.05
 
 minval = 0
@@ -153,7 +153,7 @@ for i in range(len(positions)):
     robt = abb.robtarget(positions[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)
     mp.MoveL(robt, abb.v5, abb.fine)
 
-print(positions)
+#print(positions)
 #print(len(tempPos))
 print("Robot start moving")
     
@@ -181,3 +181,4 @@ plt.xlabel('Sample')
 plt.ylabel('Joint angle (rad)')
 plt.title('Joint trajectory')
 plt.show()
+

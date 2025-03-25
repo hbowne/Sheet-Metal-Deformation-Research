@@ -96,7 +96,7 @@ tempPos = points[:, :3]
 #print(tempPos)
 
 #lowest
-minimum = -0.2
+minimum = -0.15
 increm = 0.05
 
 minval = 0
