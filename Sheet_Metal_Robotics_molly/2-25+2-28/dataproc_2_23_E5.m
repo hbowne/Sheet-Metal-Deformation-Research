@@ -1,13 +1,13 @@
 figure;
-data = load("2_23_E1");
+data = load("2_23_E5");
 dataAve = load("2_28_base");
 
 coeff = polyfit(dataAve(1, 1:1200), dataAve(2, 1:1200), 1);
 %plot(dataAve(1, 1:1200), dataAve(2, 1:1200))
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,311:906);
-z_depth = data(2,311:906);
+x_length = data(1,325:911);
+z_depth = data(2,325:911);
 
 %Original Data Plot
 %plot(x_length, z_depth)
@@ -31,7 +31,7 @@ max = islocalmax(filtered_z_depth);
 plot(x_length, distance);
 hold on;
 plot(x_length, filtered_z_depth, x_length(max),filtered_z_depth(max), 'r*');
-title("2/23 E1 Depth vs Length");
+title("2/23 E5 Depth vs Length");
 xlabel("Length (mm)");
 ylabel("Depth (mm)");
 legend("Original Data", "Filtered Data", "Max Depth")
