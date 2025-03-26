@@ -88,7 +88,7 @@ print(rig_pose)
 w = 85.2 # width of the rig (parallel to y-axis)
 h = 100.07
 l = 19.7
-thickness = 3.00
+thickness = 2.84
 
 rig_pose[:3,-1]=rig_pose[:3,-1]+rig_pose[:3,:3]@np.array([h/2,w/2,0])
 

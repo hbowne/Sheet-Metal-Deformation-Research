@@ -146,7 +146,7 @@ while height >= minimum:
         j = 0
 if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
-        positions.append([tempPos[i][0], tempPos[i][1], minimum])
+        positions.append([tempPos[i][0], tempPos[i][1], tempPos[i][2]])
 
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(positions)):

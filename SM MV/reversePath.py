@@ -85,7 +85,7 @@ log_results = client.execute_motion_program(mp) # run on the robot/robotstudio a
 exit()
 '''
 filename = "PathpointsforSheetMetal.xlsx"# replace with file path, keep the r"" though or else funky errors
-sheet_name = "FlippedFeatures"  # Replace with your sheet name
+sheet_name = "Reversed"  # Replace with your sheet name
 #sheet_name = "HorizontalLineTest"
 data = pd.read_excel(filename, sheet_name=sheet_name, header=None)
 
@@ -103,6 +103,8 @@ minval = 0
 height = 0
 positions = []
 for i in range(len(tempPos)):
+    #reverse and offset the points
+    tempPos[i] = [tempPos[i][0], 80.68 - tempPos[i][1], -tempPos[i][2]]
     if tempPos[i][2] < minval:
         minval = tempPos[i][2]
 
@@ -119,9 +121,11 @@ while height >= minimum:
     height += -increm
     if j > len(tempPos)//2:
         j = 0
+
 if height + increm > minimum and height != minimum:
     for i in range(len(tempPos)):
-        positions.append([tempPos[i][0], tempPos[i][1], minimum])
+        positions.append([tempPos[i][0], tempPos[i][1], tempPos[i][2]])
+
 
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(positions)):
@@ -130,10 +134,11 @@ for i in range(len(positions)):
 
 print(positions)
 print("Robot start moving")
-
+"""
 #client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
 client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
+"""
 exit()
 
 cmd_num=log_results.data[:,1] # command number
