@@ -30,6 +30,7 @@ max = islocalmax(filtered_z_depth);
 
 plot(x_length, distance);
 hold on;
+figure;
 plot(x_length, filtered_z_depth, x_length(max),filtered_z_depth(max), 'r*');
 title("2/23 H3 Depth vs Length");
 xlabel("Length (mm)");
