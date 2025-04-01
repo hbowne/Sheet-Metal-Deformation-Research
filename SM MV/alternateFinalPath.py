@@ -100,7 +100,7 @@ minimum = -0.45
 increm = 0.05
 
 minval = 0
-height = -.1
+height = 0
 positions = []
 for i in range(len(tempPoints)):
     if tempPoints[i][2] < minval:
