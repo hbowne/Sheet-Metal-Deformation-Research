@@ -1,23 +1,19 @@
-%No 
-figure;
-data = load("4_13_50A_3cm");
-dataAve = load("4_13_base");
-
-coeff = polyfit(dataAve(1, 1:1200), dataAve(2, 1:1200), 1);
-%plot(dataAve(1, 1:1200), dataAve(2, 1:1200))
+figure
+data = load("4_14_C6");
+base = load("4_14_Base");
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,457:1245);
-z_depth = data(2,457:1245);
+x_length = data(1,1:1238);
+z_depth = data(2,1:1238);
 
 %Original Data Plot
-plot(x_length, z_depth)
-figure;
+%plot(x_length, z_depth)
+%figure;
 
 %Trendline
-z_linear = z_depth;
-x_linear = x_length;
-%coeff = polyfit(x_linear, z_linear, 1);
+basex = x_length;
+basey = z_depth;
+coeff = polyfit(basex, basey, 1);
 lin_fit = coeff(1)*x_length + coeff(2);
 
 %Adjust Data for Surface Tilt
@@ -32,7 +28,7 @@ max = islocalmax(filtered_z_depth);
 plot(x_length, distance);
 hold on;
 plot(x_length, filtered_z_depth, x_length(max),filtered_z_depth(max), 'r*');
-title("4/13 50A 3cm Depth vs Length");
+title("4/14/25 C6 Depth vs Length");
 xlabel("Length (mm)");
 ylabel("Depth (mm)");
 legend("Original Data", "Filtered Data", "Max Depth")

@@ -1,3 +1,4 @@
+figure;
 data = load("4_13_20A_4cm");
 base = load("4_13_Base");
 

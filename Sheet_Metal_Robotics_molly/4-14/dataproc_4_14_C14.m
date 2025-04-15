@@ -1,10 +1,10 @@
 figure
-data = load("4_13_20A_3cm");
-base = load("4_13_Base");
+data = load("4_14_C14");
+base = load("4_14_Base");
 
 %Truncate data based off of initial plot, adjust values to delete flags
-x_length = data(1,480:1256);
-z_depth = data(2,480:1256);
+x_length = data(1,1:1197);
+z_depth = data(2,1:1197);
 
 %Original Data Plot
 %plot(x_length, z_depth)
@@ -28,7 +28,7 @@ max = islocalmax(filtered_z_depth);
 plot(x_length, distance);
 hold on;
 plot(x_length, filtered_z_depth, x_length(max),filtered_z_depth(max), 'r*');
-title("4/13/25 20A 3cm Depth vs Length");
+title("4/14/25 C14 Depth vs Length");
 xlabel("Length (mm)");
 ylabel("Depth (mm)");
 legend("Original Data", "Filtered Data", "Max Depth")
