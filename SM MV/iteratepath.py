@@ -68,14 +68,15 @@ mp = abb.MotionProgram(tool=my_tool,wobj=my_wobj)
 
 # Rotation are all np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 #Points 0 is -1
-
+"""
 #Check origin
+p = [10,10,10]
 p1 = [4.81079974, 69.72289322, 10.0] 
 p2 = [10, 7, -0.3]
 p3 = [50, 50, 20]
 p4 = [50, 0, 20]
 
-corner_p = np.array([p1, p2, p1])
+corner_p = np.array([p])
 corner_R = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, -1]]).T
 for i in range(len(corner_p)):
     robt = abb.robtarget(corner_p[i], R2q(corner_R), abb.confdata(0, -1, -1, 0), [0]*6)# create the robtarget, position (mm), orientation (quaternion)
@@ -90,23 +91,23 @@ print("Robot start moving")
 client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
 exit()
-
+"""
 for j in range(0,13):
     #Points 0 is -1
-    p1 = [20, 20, 5] 
-    p2 = [20, 20, 0-.02*j]
-    p3 = [20, 60, 0-.02*j]
-    p4 = [20, 60, 5]
+    p1 = [65, 20, 5] 
+    p2 = [65, 20, -.02*j]
+    p3 = [65, 60, -.02*j]
+    p4 = [65, 60, 5]
 
-    p4 = [30, 20, 5] 
-    p5 = [30, 20, 0-.02*j]
-    p6 = [30, 60, 0-.02*j]
-    p7 = [30, 60, 5]
+    p4 = [75, 20, 5] 
+    p5 = [75, 20, -.02*j]
+    p6 = [75, 60, -.02*j]
+    p7 = [75, 60, 5]
 
-    p8 = [40, 20, 5] 
-    p9 = [40, 20, 0-.02*j]
-    p10 = [40, 60,0-.02*j]
-    p11= [40, 60, 5]
+    p8 = [85, 20, 5] 
+    p9 = [85, 20, -.02*j]
+    p10 = [85, 60,-.02*j]
+    p11 = [85, 60, 5]
 
     
     corner_p = np.array([p1,p2,p3,p4, p5, p6, p7, p8, p9, p10, p11])
