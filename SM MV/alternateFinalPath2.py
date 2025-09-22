@@ -23,7 +23,8 @@ Pbr = final_rig_pose[0:3,-1]
 
 Rbr = final_rig_pose[0:3, 0:3]@Rz
 
-Pft = np.array([-55.755, 0, 130.05])
+#MUST BE THE SAME AS ZCALIB VALUES
+Pft = np.array([-55.45, 0, 131.2])
 
 tool_T = Transform(np.eye(3), Pft)
 
@@ -38,10 +39,10 @@ with open('ABB_1200_5_90_robot_default_config.yml', 'r') as file:
 my_tool = abb.tooldata(True,abb.pose(tool_T.p,R2q(tool_T.R)),abb.loaddata(0.001,[0,0,0.001],[1,0,0,0],0,0,0))
 
 #for run on sheet metal
-my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [7,0,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
+my_wobj = abb.wobjdata(False,True,"",abb.pose(Pbr + [8,-4,0],qbr),abb.pose([0,0,0],[1,0,0,0]))#callibration work object
 #for run in space
-#my_wobj = abb.wobjdata(False,True,"",abb.pose([592.98,61.32,297.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
-
+#my_wobj = abb.wobjdata(False,True,"",abb.pose([595.98,61.32,257.24],[1,0,0,0]),abb.pose([0,0,0],[1,0,0,0]))
+#x = 8, y = -4
 def quadrant(q,robot):
 	cf146=np.floor(np.array([q[0],q[3],q[5]])/(np.pi/2))
 	eef=fwdkin(robot,q).p
@@ -82,7 +83,7 @@ print("Robot start moving")
 #client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
 client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
-exit()
+exit()S
 '''
 filename = "NewWaypoints.xlsx"# replace with file path, keep the r"" though or else funky errors
 sheet_name = "FinalData"  # Replace with your sheet name
@@ -97,8 +98,8 @@ tempPoints = points[:, :3]
 #print(tempPoints)
 
 #lowest
-minimum = -0.45
-increm = 0.05
+minimum = -0.32
+increm = 0.04
 
 minval = 0
 height = 0
@@ -159,8 +160,8 @@ for i in range(len(positions)):
 #print(len(tempPos))
 print("Robot start moving")
     
-client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
-#client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
+#client = abb.MotionProgramExecClient(base_url="http://127.0.0.1:80") # for simulation in RobotStudio
+client = abb.MotionProgramExecClient(base_url="http://192.168.60.101:80") # for real robot
 log_results = client.execute_motion_program(mp) # run on the robot/robotstudio and log the results
 
 exit()
