@@ -80,8 +80,10 @@ plt.ylabel('Force')
 
 ft_record = []
 runtime = []
-iterations = 20
-for i in range(0,iterations):
+#iterations = 20
+#for i in range(0,iterations):
+b = 20
+while b == 20:
 	try:
 		t = time.time()
 		time.sleep(0.1)
@@ -103,13 +105,18 @@ for i in range(0,iterations):
 	except (Exception,KeyboardInterrupt) as e:
 		print("Error:", e)
 		#mctrl.stop_egm()
+		print(ft_record)
+		plt.title("Force Torque Sensor Reading")
+		plt.plot(runtime,ft_record,'-o')
+		plt.show()
+		np.savetxt(filename, ft_record, delimiter=',')
 		exit()
+
+
 print(ft_record)
-plt.label("Force Torque Sensor Reading")
+plt.title("Force Torque Sensor Reading")
 plt.plot(runtime,ft_record,'-o')
 plt.show()
 np.savetxt(filename, ft_record, delimiter=',')
-
-
 
 		
