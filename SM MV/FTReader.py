@@ -82,8 +82,7 @@ ft_record = []
 runtime = []
 #iterations = 20
 #for i in range(0,iterations):
-b = 20
-while b == 20:
+while True:
 	try:
 		t = time.time()
 		time.sleep(0.1)
