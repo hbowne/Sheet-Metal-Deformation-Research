@@ -82,15 +82,15 @@ ft_record = []
 runtime = []
 #iterations = 20
 #for i in range(0,iterations):
+time.sleep(0.1)
+# ati_tf.set_tare_from_ft()	#clear bias
+mctrl.RR_ati_cli.setf_param("set_tare", RR.VarValue(True, "bool")) # clear bias
+# res, tf, status = ati_tf.try_read_ft_streaming(.1)###get force feedback
+time.sleep(0.1)
+mctrl.RR_ati_cli.setf_param("set_tare", RR.VarValue(True, "bool")) # clear bias
 while True:
 	try:
 		t = time.time()
-		time.sleep(0.1)
-		# ati_tf.set_tare_from_ft()	#clear bias
-		mctrl.RR_ati_cli.setf_param("set_tare", RR.VarValue(True, "bool")) # clear bias
-		# res, tf, status = ati_tf.try_read_ft_streaming(.1)###get force feedback
-		time.sleep(0.1)
-		mctrl.RR_ati_cli.setf_param("set_tare", RR.VarValue(True, "bool")) # clear bias
 		time.sleep(0.1)
 		print("Current force reading:",mctrl.ft_reading)
 		print("Time:",t)
@@ -108,7 +108,8 @@ while True:
 		plt.title("Force Torque Sensor Reading")
 		plt.plot(runtime,ft_record,'-o')
 		plt.show()
-		np.savetxt(filename, ft_record, delimiter=',')
+		data = np.column_stack((runtime, ft_record))
+		np.savetxt(filename, data, delimiter=',')
 		exit()
 
 
